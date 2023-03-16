@@ -40,7 +40,6 @@ services:
     working_dir: /var/www/mysql
     tty: true
     volumes:
-      - ./phpdocker/dbdata:/var/lib/mysql
       - ./phpdocker/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
     environment:
       MYSQL_DATABASE: sx-cms
@@ -59,6 +58,3 @@ services:
     restart: always
     depends_on:
       - mysql
-
-volumes:
-  dbdata:

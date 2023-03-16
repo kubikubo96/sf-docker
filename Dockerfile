@@ -1,21 +1,41 @@
-FROM phpdockerio/php74-fpm
+FROM php:8.2.3-fpm
 
-# Fix debconf warnings upon build
-ARG DEBIAN_FRONTEND=noninteractive
+# Arguments defined in docker-compose.yml
+ARG user
+ARG uid
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    git \
+    curl \
+    libzip-dev \
+    libpng-dev \
+    libonig-dev \
+    libxml2-dev \
+    zip \
+    unzip \
+    redis-tools \
+    yarn
+
+# Clear cache
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Install PHP extensions
+RUN docker-php-ext-install pdo pdo_mysql mbstring exif pcntl bcmath gd xml zip iconv
+
+# Install Xdebug
+RUN pecl install xdebug \
+    && docker-php-ext-enable xdebug
+
+# Get latest Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# Create system user to run Composer and Artisan Commands
+RUN useradd -G www-data,root -u $uid -d /home/$user $user
+RUN mkdir -p /home/$user/.composer && \
+    chown -R $user:$user /home/$user
+
 # Set working directory
-WORKDIR /var/www
-
-# Install selected extensions and other stuff
-RUN apt-get update \
-    && apt-get -y --no-install-recommends install  php7.4-mysql php7.4-redis php7.4-xdebug \
-    && apt-get clean; rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
-
-# Add user for laravel application
-RUN groupadd -g 1000 www
-RUN useradd -u 1000 -ms /bin/bash -g www www
-
-# Copy existing application directory contents
-COPY . /var/www
-
-# Copy existing application directory permissions
-COPY --chown=www:www . /var/www
+WORKDIR /var/www/html/phpinfo
+RUN chown -R www-data:www-data /var/www/html/phpinfo
+USER $user

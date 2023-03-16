@@ -31,7 +31,7 @@ services:
     tty: true
     volumes:
       - ../phpinfo/:/var/www/html/phpinfo
-      - ./phpdocker/php-fpm/php-ini-overrides.ini:/etc/php/7.4/fpm/conf.d/99-overrides.ini
+      - ./phpdocker/php-fpm/php-ini-overrides.ini:/usr/local/etc/php/conf.d/99-overrides.ini
     expose:
       - 9000
 

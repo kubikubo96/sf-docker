@@ -28,6 +28,7 @@ RUN docker-php-ext-install pdo pdo_mysql mbstring exif pcntl bcmath gd xml zip i
 RUN pecl install xdebug \
     && docker-php-ext-enable xdebug
 
+# Install Sockets
 RUN docker-php-ext-install sockets
 
 # Get latest Composer

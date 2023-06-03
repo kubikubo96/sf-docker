@@ -39,7 +39,7 @@ services:
       - 9000
 
   rabbitmq:
-    image: rabbitmq:3.11-management-alpine
+    image: rabbitmq:3.11-management
     ports:
       - "5672:5672"
       - "15672:15672"

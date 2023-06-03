@@ -50,6 +50,40 @@ services:
     expose:
       - 9000
 
+  micro-a:
+    image: micro-a
+    build:
+      args:
+        user: kubikubo
+        uid: 1000
+      context: ./micro-a
+      dockerfile: Dockerfile
+    container_name: micro-a
+    working_dir: /var/www/html/micro-a
+    tty: true
+    volumes:
+      - ${LARAVEL_API}
+      - ./micro-a/php-ini-overrides.ini:/usr/local/etc/php/conf.d/99-overrides.ini
+    expose:
+      - 9000
+
+  micro-b:
+    image: micro-b
+    build:
+      args:
+        user: kubikubo
+        uid: 1000
+      context: ./micro-b
+      dockerfile: Dockerfile
+    container_name: micro-b
+    working_dir: /var/www/html/micro-b
+    tty: true
+    volumes:
+      - ${LARAVEL_API}
+      - ./micro-b/php-ini-overrides.ini:/usr/local/etc/php/conf.d/99-overrides.ini
+    expose:
+      - 9000
+
   mysql:
     image: mysql:8.0
     ports:

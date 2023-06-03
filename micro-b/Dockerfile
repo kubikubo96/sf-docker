@@ -36,6 +36,6 @@ RUN mkdir -p /home/$user/.composer && \
     chown -R $user:$user /home/$user
 
 # Set working directory
-WORKDIR /var/www/html/sf-laravel-api
-RUN chown -R www-data:www-data /var/www/html/sf-laravel-api
+WORKDIR /var/www/html/micro-b
+RUN chown -R www-data:www-data /var/www/html/micro-b
 USER $user

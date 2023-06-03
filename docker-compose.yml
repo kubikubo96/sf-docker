@@ -38,6 +38,20 @@ services:
     expose:
       - 9000
 
+  rabbitmq:
+    image: rabbitmq:latest
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    container_name: rabbitmq
+    tty: true
+    volumes:
+      - ./rabbitmq/data/:/var/lib/rabbitmq
+      - ./rabbitmq/log/:/var/log/rabbitmq
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=1
+
   sf-laravel-api:
     image: sf-laravel-api
     build:

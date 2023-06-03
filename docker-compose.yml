@@ -48,9 +48,6 @@ services:
     volumes:
       - ./rabbitmq/data/:/var/lib/rabbitmq
       - ./rabbitmq/log/:/var/log/rabbitmq
-    environment:
-      - RABBITMQ_DEFAULT_USER=admin
-      - RABBITMQ_DEFAULT_PASS=1
 
   sf-laravel-api:
     image: sf-laravel-api

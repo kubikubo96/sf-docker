@@ -109,6 +109,8 @@ services:
 
   mysql-micro-a:
     image: mysql-micro-a
+    ports:
+      - "3301:3306"
     build:
       context: ./mysql
       dockerfile: Dockerfile
@@ -121,11 +123,11 @@ services:
       MYSQL_DATABASE: micro_a
       MYSQL_ROOT_PASSWORD: root
       MYSQL_PASSWORD: root
-    ports:
-    - "3301:3306"
 
   mysql-micro-b:
     image: mysql-micro-b
+    ports:
+      - "3302:3306"
     build:
       context: ./mysql
       dockerfile: Dockerfile
@@ -138,5 +140,3 @@ services:
       MYSQL_DATABASE: micro_b
       MYSQL_ROOT_PASSWORD: root
       MYSQL_PASSWORD: root
-    ports:
-    - "3302:3306"

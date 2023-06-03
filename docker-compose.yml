@@ -13,8 +13,13 @@ services:
       - ${NGINX}
       - ${PHP_INFO}
       - ${LARAVEL_API}
+      - ${MICRO_A}
+      - ${MICRO_B}
     depends_on:
       - php-info
+      - sf-laravel-api
+      - micro-a
+      - micro-b
 
   php-info:
     image: php-info
@@ -62,7 +67,7 @@ services:
     working_dir: /var/www/html/micro-a
     tty: true
     volumes:
-      - ${LARAVEL_API}
+      - ${MICRO_A}
       - ./micro-a/php-ini-overrides.ini:/usr/local/etc/php/conf.d/99-overrides.ini
     expose:
       - 9000
@@ -79,7 +84,7 @@ services:
     working_dir: /var/www/html/micro-b
     tty: true
     volumes:
-      - ${LARAVEL_API}
+      - ${MICRO_B}
       - ./micro-b/php-ini-overrides.ini:/usr/local/etc/php/conf.d/99-overrides.ini
     expose:
       - 9000

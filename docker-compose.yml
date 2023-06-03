@@ -39,15 +39,14 @@ services:
       - 9000
 
   rabbitmq:
-    image: rabbitmq:latest
+    image: rabbitmq:3.11-management-alpine
     ports:
       - "5672:5672"
       - "15672:15672"
     container_name: rabbitmq
     tty: true
     volumes:
-      - ./rabbitmq/data/:/var/lib/rabbitmq
-      - ./rabbitmq/log/:/var/log/rabbitmq
+      - ./rabbitmq/:/var/lib/rabbitmq
 
   sf-laravel-api:
     image: sf-laravel-api

@@ -1,8 +1,7 @@
-FROM rabbitmq:latest
+FROM rabbitmq:3.11-management-alpine
 
 EXPOSE 5672 15672
 
-RUN rabbitmq-plugins enable --offline rabbitmq_management
-
+ENV RABBITMQ_DEFAULT_HOST=localhost
 ENV RABBITMQ_DEFAULT_USER=guest
 ENV RABBITMQ_DEFAULT_PASS=guest

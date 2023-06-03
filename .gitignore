@@ -2,5 +2,8 @@
 
 .vscode
 
+rabbitmq/mnesia
+rabbitmq/.ash_history
+rabbitmq/.erlang.cookie
 rabbitmq/data
 rabbitmq/log

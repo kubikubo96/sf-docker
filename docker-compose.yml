@@ -51,7 +51,7 @@ services:
     tty: true
     volumes:
       - ${LARAVEL_API}
-      - ./sf-laravel-api/php-ini-overrides.ini:/usr/local/etc/php/conf.d/99-overrides.ini
+      - ${LARAVEL_API_OVERRIDES}
     expose:
       - 9000
 
@@ -68,7 +68,7 @@ services:
     tty: true
     volumes:
       - ${MICRO_A}
-      - ./micro-a/php-ini-overrides.ini:/usr/local/etc/php/conf.d/99-overrides.ini
+      - ${MICRO_A_OVERRIDES}
     expose:
       - 9000
 
@@ -85,7 +85,7 @@ services:
     tty: true
     volumes:
       - ${MICRO_B}
-      - ./micro-b/php-ini-overrides.ini:/usr/local/etc/php/conf.d/99-overrides.ini
+      - ${MICRO_B_OVERRIDES}
     expose:
       - 9000
 
@@ -97,7 +97,7 @@ services:
     working_dir: /var/www/html/mysql
     tty: true
     volumes:
-      - ./mysql/my.cnf:/etc/mysql/conf.d/my.cnf
+      - ${MYSQL}
     environment:
       MYSQL_DATABASE: db_docker
       MYSQL_ROOT_PASSWORD: root

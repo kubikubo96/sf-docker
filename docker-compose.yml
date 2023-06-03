@@ -94,13 +94,49 @@ services:
     ports:
       - "3306:3306"
     container_name: mysql
-    working_dir: /var/www/html/mysql
     tty: true
     volumes:
       - ${MYSQL}
+      - ${MYSQL_MICRO_A}
+      - ${MYSQL_MICRO_B}
     environment:
-      MYSQL_DATABASE: db_docker
+      MYSQL_DATABASE: kubikubo
       MYSQL_ROOT_PASSWORD: root
       MYSQL_PASSWORD: root
     depends_on:
-      - php-info
+      - mysql-micro-a
+      - mysql-micro-b
+
+  mysql-micro-a:
+    image: mysql-micro-a
+    build:
+      context: ./mysql
+      dockerfile: Dockerfile
+    container_name: mysql-micro-a
+    working_dir: /var/www/html/mysql-micro-b
+    tty: true
+    volumes:
+      - ${MYSQL_MICRO_A}
+    environment:
+      MYSQL_DATABASE: micro_a
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_PASSWORD: root
+    ports:
+    - "3301:3306"
+
+  mysql-micro-b:
+    image: mysql-micro-b
+    build:
+      context: ./mysql
+      dockerfile: Dockerfile
+    container_name: mysql-micro-b
+    working_dir: /var/www/html/mysql-micro-b
+    tty: true
+    volumes:
+      - ${MYSQL_MICRO_B}
+    environment:
+      MYSQL_DATABASE: micro_b
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_PASSWORD: root
+    ports:
+    - "3302:3306"

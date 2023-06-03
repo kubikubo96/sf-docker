@@ -4,6 +4,7 @@
 
 rabbitmq/mnesia
 rabbitmq/.ash_history
+rabbitmq/.base_history
 rabbitmq/.erlang.cookie
 rabbitmq/data
 rabbitmq/log

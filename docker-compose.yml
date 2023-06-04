@@ -46,7 +46,7 @@ services:
     container_name: rabbitmq
     tty: true
     volumes:
-      - ./rabbitmq/:/var/lib/rabbitmq
+      # - ./rabbitmq/:/var/lib/rabbitmq
 
   sf-laravel-api:
     image: sf-laravel-api

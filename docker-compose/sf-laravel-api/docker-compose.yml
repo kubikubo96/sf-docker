@@ -1,0 +1,51 @@
+version: "3.1"
+
+services:
+
+  nginx:
+    image: nginx:stable-alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    container_name: nginx
+    tty: true
+    volumes:
+      - ${NGINX}
+      - ${PHP_INFO}
+      - ${LARAVEL_API}
+    depends_on:
+      - php-info
+      - sf-laravel-api
+
+  sf-laravel-api:
+    image: sf-laravel-api
+    build:
+      args:
+        user: kubikubo
+        uid: 1000
+      context: ./sf-laravel-api
+      dockerfile: Dockerfile
+    container_name: sf-laravel-api
+    working_dir: /var/www/html/sf-laravel-api
+    tty: true
+    volumes:
+      - ${LARAVEL_API}
+      - ${LARAVEL_API_OVERRIDES}
+    expose:
+      - 9000
+
+  mysql:
+    image: mysql:8.0
+    ports:
+      - "3306:3306"
+    container_name: mysql
+    tty: true
+    volumes:
+      - ${MYSQL}
+    environment:
+      MYSQL_DATABASE: kubikubo
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_PASSWORD: root
+    depends_on:
+      - mysql-micro-a
+      - mysql-micro-b

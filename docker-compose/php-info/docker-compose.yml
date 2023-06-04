@@ -1,0 +1,33 @@
+version: "3.1"
+
+services:
+
+  nginx:
+    image: nginx:stable-alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    container_name: nginx
+    tty: true
+    volumes:
+      - ${NGINX}
+      - ${PHP_INFO}
+    depends_on:
+      - php-info
+
+  php-info:
+    image: php-info
+    build:
+      args:
+        user: kubikubo
+        uid: 1000
+      context: ./php-info
+      dockerfile: Dockerfile
+    container_name: php-info
+    working_dir: /var/www/html/phpinfo
+    tty: true
+    volumes:
+      - ${PHP_INFO}
+      - ./php-info/php-ini-overrides.ini:/usr/local/etc/php/conf.d/99-overrides.ini
+    expose:
+      - 9000

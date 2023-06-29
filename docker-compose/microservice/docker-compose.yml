@@ -13,6 +13,7 @@ services:
       - ${NGINX}
       - ${MICRO_A}
       - ${MICRO_B}
+      - ${MICRO_C}
     depends_on:
       - micro-a
       - micro-b
@@ -60,6 +61,23 @@ services:
     expose:
       - 9000
 
+  micro-c:
+    image: micro-c
+    build:
+      args:
+        user: kubikubo
+        uid: 1000
+      context: ./micro-c
+      dockerfile: Dockerfile
+    container_name: micro-c
+    working_dir: /var/www/html/micro-c
+    tty: true
+    volumes:
+      - ${MICRO_C}
+      - ${MICRO_C_OVERRIDES}
+    expose:
+      - 9000
+
   mysql:
     image: mysql:8.0
     ports:
@@ -70,6 +88,7 @@ services:
       - ${MYSQL}
       - ${MYSQL_MICRO_A}
       - ${MYSQL_MICRO_B}
+      - ${MYSQL_MICRO_C}
     environment:
       MYSQL_DATABASE: kubikubo
       MYSQL_ROOT_PASSWORD: root

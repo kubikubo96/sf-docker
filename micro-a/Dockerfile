@@ -1,4 +1,4 @@
-FROM php:8.2.3-fpm
+FROM php:7.4-fpm
 
 # Arguments defined in docker-compose.yml
 ARG user
@@ -25,8 +25,8 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/*f
 RUN docker-php-ext-install pdo pdo_mysql mbstring exif pcntl bcmath gd xml zip iconv
 
 # Install Xdebug
-RUN pecl install xdebug \
-    && docker-php-ext-enable xdebug
+RUN pecl install xdebug-2.9.7 \
+&& docker-php-ext-enable xdebug
 
 # Install Sockets
 RUN docker-php-ext-install sockets

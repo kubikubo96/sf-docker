@@ -16,9 +16,10 @@ services:
     depends_on:
       - micro-a
       - micro-b
+      - micro-c
 
   rabbitmq:
-    image: rabbitmq:3.11-management
+    image: rabbitmq:3.12-management
     ports:
       - "5672:5672"
       - "15672:15672"
@@ -76,6 +77,7 @@ services:
     depends_on:
       - mysql-micro-a
       - mysql-micro-b
+      - mysql-micro-c
 
   mysql-micro-a:
     image: mysql-micro-a
@@ -108,5 +110,22 @@ services:
       - ${MYSQL_MICRO_B}
     environment:
       MYSQL_DATABASE: micro_b
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_PASSWORD: root
+
+  mysql-micro-c:
+    image: mysql-micro-c
+    ports:
+      - "3303:3306"
+    build:
+      context: ./mysql
+      dockerfile: Dockerfile
+    container_name: mysql-micro-c
+    working_dir: /var/www/html/mysql-micro-c
+    tty: true
+    volumes:
+      - ${MYSQL_MICRO_C}
+    environment:
+      MYSQL_DATABASE: micro_c
       MYSQL_ROOT_PASSWORD: root
       MYSQL_PASSWORD: root

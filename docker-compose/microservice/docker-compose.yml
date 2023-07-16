@@ -13,11 +13,9 @@ services:
       - ${NGINX}
       - ${MICRO_A}
       - ${MICRO_B}
-      - ${MICRO_C}
     depends_on:
       - micro-a
       - micro-b
-      - micro-c
 
   rabbitmq:
     image: rabbitmq:3.12-management
@@ -61,25 +59,8 @@ services:
     expose:
       - 9000
 
-  micro-c:
-    image: micro-c
-    build:
-      args:
-        user: kubikubo
-        uid: 1000
-      context: ./micro-c
-      dockerfile: Dockerfile
-    container_name: micro-c
-    working_dir: /var/www/html/micro-c
-    tty: true
-    volumes:
-      - ${MICRO_C}
-      - ${MICRO_C_OVERRIDES}
-    expose:
-      - 9000
-
   mysql:
-    image: mysql:8.0
+    image: mysql:5.7
     ports:
       - "3306:3306"
     container_name: mysql
@@ -88,7 +69,6 @@ services:
       - ${MYSQL}
       - ${MYSQL_MICRO_A}
       - ${MYSQL_MICRO_B}
-      - ${MYSQL_MICRO_C}
     environment:
       MYSQL_DATABASE: kubikubo
       MYSQL_ROOT_PASSWORD: root
@@ -96,7 +76,6 @@ services:
     depends_on:
       - mysql-micro-a
       - mysql-micro-b
-      - mysql-micro-c
 
   mysql-micro-a:
     image: mysql-micro-a
@@ -106,7 +85,7 @@ services:
       context: ./mysql
       dockerfile: Dockerfile
     container_name: mysql-micro-a
-    working_dir: /var/www/html/mysql-micro-b
+    working_dir: /var/www/html/mysql-micro-a
     tty: true
     volumes:
       - ${MYSQL_MICRO_A}
@@ -129,22 +108,5 @@ services:
       - ${MYSQL_MICRO_B}
     environment:
       MYSQL_DATABASE: micro_b
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_PASSWORD: root
-
-  mysql-micro-c:
-    image: mysql-micro-c
-    ports:
-      - "3303:3306"
-    build:
-      context: ./mysql
-      dockerfile: Dockerfile
-    container_name: mysql-micro-c
-    working_dir: /var/www/html/mysql-micro-c
-    tty: true
-    volumes:
-      - ${MYSQL_MICRO_C}
-    environment:
-      MYSQL_DATABASE: micro_c
       MYSQL_ROOT_PASSWORD: root
       MYSQL_PASSWORD: root

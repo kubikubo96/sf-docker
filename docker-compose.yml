@@ -10,28 +10,38 @@ services:
     container_name: nginx
     tty: true
     volumes:
-      - ./sf-laravel-api/sf-laravel-api-nginx.conf:/etc/nginx/conf.d/sf-laravel-api-nginx.conf
-      - ../sf-laravel-api/:/var/www/html/sf-laravel-api
+      - ./sfvel-api/sfvel-api-nginx.conf:/etc/nginx/conf.d/sfvel-api-nginx.conf
+      - ../sfvel-api/:/var/www/html/sfvel-api
     depends_on:
-      - sf-laravel-api
+      - sfvel-api
 
-  sf-laravel-api:
-    image: sf-laravel-api
+  sfvel-api:
+    image: sfvel-api
     build:
       args:
         user: kubikubo
         uid: 1000
-      context: ./sf-laravel-api
+      context: ./sfvel-api
       dockerfile: Dockerfile
-    container_name: sf-laravel-api
-    working_dir: /var/www/html/sf-laravel-api
+    container_name: sfvel-api
+    working_dir: /var/www/html/sfvel-api
     tty: true
     volumes:
-      - ../sf-laravel-api/:/var/www/html/sf-laravel-api
-      - ./sf-laravel-api/php-ini-overrides.ini:/usr/local/etc/php/conf.d/99-overrides.ini
-      - ./sf-laravel-api/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+      - ../sfvel-api/:/var/www/html/sfvel-api
+      - ./sfvel-api/php-ini-overrides.ini:/usr/local/etc/php/conf.d/99-overrides.ini
+      - ./sfvel-api/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
     expose:
       - 9000
+
+  sfvel-api-worker:
+        build:
+            context: .
+            dockerfile: sfvel-api/supervisor/Dockerfile
+        container_name: sfvel-api-worker
+        volumes:
+            - ../sfvel-api/:/var/www/html/sfvel-api-worker/
+            - ./sfvel-api/supervisor:/etc/supervisor/
+            - ./sfvel-api/php/php-ini-overrides.ini:/usr/local/etc/php/conf.d/php-ini-overrides.ini
 
   mysql:
     image: mysql:8.0
@@ -42,6 +52,6 @@ services:
     volumes:
       - ${MYSQL}
     environment:
-      MYSQL_DATABASE: sf_laravel_api
+      MYSQL_DATABASE: sfvel
       MYSQL_ROOT_PASSWORD: root
       MYSQL_PASSWORD: root

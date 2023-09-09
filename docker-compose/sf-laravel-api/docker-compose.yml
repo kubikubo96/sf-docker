@@ -10,11 +10,9 @@ services:
     container_name: nginx
     tty: true
     volumes:
-      - ${NGINX}
-      - ${PHP_INFO}
-      - ${LARAVEL_API}
+      - ./sf-laravel-api/sf-laravel-api-nginx.conf:/etc/nginx/conf.d/sf-laravel-api-nginx.conf
+      - ../sf-laravel-api/:/var/www/html/sf-laravel-api
     depends_on:
-      - php-info
       - sf-laravel-api
 
   sf-laravel-api:
@@ -29,8 +27,9 @@ services:
     working_dir: /var/www/html/sf-laravel-api
     tty: true
     volumes:
-      - ${LARAVEL_API}
-      - ${LARAVEL_API_OVERRIDES}
+      - ../sf-laravel-api/:/var/www/html/sf-laravel-api
+      - ./sf-laravel-api/php-ini-overrides.ini:/usr/local/etc/php/conf.d/99-overrides.ini
+      - ./sf-laravel-api/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
     expose:
       - 9000
 
@@ -43,9 +42,6 @@ services:
     volumes:
       - ${MYSQL}
     environment:
-      MYSQL_DATABASE: kubikubo
+      MYSQL_DATABASE: sf_laravel_api
       MYSQL_ROOT_PASSWORD: root
       MYSQL_PASSWORD: root
-    depends_on:
-      - mysql-micro-a
-      - mysql-micro-b

@@ -10,7 +10,8 @@ services:
     container_name: nginx
     tty: true
     volumes:
-      - ${NGINX}
+      - ./micro-a/micro-a-nginx.conf:/etc/nginx/conf.d/micro-a-nginx.conf
+      - ./micro-b/micro-b-nginx.conf:/etc/nginx/conf.d/micro-b-nginx.conf
       - ${MICRO_A}
       - ${MICRO_B}
     depends_on:
@@ -60,7 +61,7 @@ services:
       - 9000
 
   mysql:
-    image: mysql:5.7
+    image: mysql:8.0
     ports:
       - "3306:3306"
     container_name: mysql

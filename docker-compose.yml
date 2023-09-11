@@ -68,3 +68,10 @@ services:
       MYSQL_DATABASE: sfvel
       MYSQL_ROOT_PASSWORD: root
       MYSQL_PASSWORD: root
+
+  redis-master:
+      image: redis
+      container_name: redis-master
+      restart: always
+      ports:
+          - 6379:6379

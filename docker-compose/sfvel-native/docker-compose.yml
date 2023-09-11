@@ -1,0 +1,47 @@
+version: "3.1"
+
+services:
+
+  nginx:
+    image: nginx:stable-alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    container_name: nginx
+    tty: true
+    volumes:
+      - ./sfvel-native/sfvel-native-nginx.conf:/etc/nginx/conf.d/sfvel-native-nginx.conf
+      - ../sfvel-native/:/var/www/html/sfvel-native
+    depends_on:
+      - sfvel-native
+
+  sfvel-native:
+    image: sfvel-native
+    build:
+      args:
+        user: kubikubo
+        uid: 1000
+      context: ./sfvel-native
+      dockerfile: Dockerfile
+    container_name: sfvel-native
+    working_dir: /var/www/html/sfvel-native
+    tty: true
+    volumes:
+      - ../sfvel-native/:/var/www/html/sfvel-native
+      - ./sfvel-native/php-ini-overrides.ini:/usr/local/etc/php/conf.d/99-overrides.ini
+      - ./sfvel-native/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+    expose:
+      - 9000
+
+  mysql:
+    image: mysql:8.0
+    ports:
+      - "3306:3306"
+    container_name: mysql
+    tty: true
+    volumes:
+      - ${MYSQL}
+    environment:
+      MYSQL_DATABASE: sfvel
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_PASSWORD: root

@@ -43,6 +43,19 @@ services:
             - ./sfvel-api/supervisor:/etc/supervisor/
             - ./sfvel-api/php/php-ini-overrides.ini:/usr/local/etc/php/conf.d/php-ini-overrides.ini
 
+  sfvel-fe:
+        container_name: sfvel-fe
+        build:
+            context: ./sfvel-fe
+            dockerfile: Dockerfile
+        restart: always
+        tty: true
+        volumes:
+            - ../sfvel-fe/:/var/www/html/sfvel-fe
+            - /app/node_modules
+        ports:
+            - 5173:5173
+
   mysql:
     image: mysql:8.0
     ports:

@@ -2,12 +2,12 @@ version: "3.1"
 
 services:
 
-  nginx:
+  sf-nginx:
     image: nginx:stable-alpine
     ports:
       - "80:80"
       - "443:443"
-    container_name: nginx
+    container_name: sf-nginx
     tty: true
     volumes:
       - ./sfvel-api/nginx.conf:/etc/nginx/conf.d/sf-nginx.conf
@@ -56,11 +56,11 @@ services:
         ports:
             - 5173:5173
 
-  mysql:
+  sf-mysql:
     image: mysql:8.0
     ports:
       - "3306:3306"
-    container_name: mysql
+    container_name: sf-mysql
     tty: true
     volumes:
       - ${MYSQL}

@@ -10,7 +10,7 @@ services:
     container_name: nginx
     tty: true
     volumes:
-      - ./sfvel-api/sfvel-api-nginx.conf:/etc/nginx/conf.d/sfvel-api-nginx.conf
+      - ./sfvel-api/nginx.conf:/etc/nginx/conf.d/sf-nginx.conf
       - ../sfvel-api/:/var/www/html/sfvel-api
     depends_on:
       - sfvel-api

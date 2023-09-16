@@ -28,7 +28,7 @@ services:
     tty: true
     volumes:
       - ../sfvel-api/:/var/www/html/sfvel-api
-      - ./sfvel-api/php-ini-overrides.ini:/usr/local/etc/php/conf.d/99-overrides.ini
+      - ./sfvel-api/php-ini-overrides.ini:/usr/local/etc/php/conf.d/php-ini-overrides.ini
       - ./sfvel-api/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
     expose:
       - 9000
@@ -41,7 +41,7 @@ services:
         volumes:
             - ../sfvel-api/:/var/www/html/sfvel-api-worker/
             - ./sfvel-api/supervisor:/etc/supervisor/
-            - ./sfvel-api/php/php-ini-overrides.ini:/usr/local/etc/php/conf.d/php-ini-overrides.ini
+            - ./sfvel-api/php-ini-overrides.ini:/usr/local/etc/php/conf.d/php-ini-overrides.ini
 
   sfvel-fe:
         container_name: sfvel-fe
@@ -69,9 +69,9 @@ services:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_PASSWORD: root
 
-  redis-master:
+  sf-redis:
       image: redis
-      container_name: redis-master
+      container_name: sf-redis
       restart: always
       ports:
           - 6379:6379

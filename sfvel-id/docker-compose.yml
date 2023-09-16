@@ -1,0 +1,54 @@
+version: "3.1"
+
+services:
+
+  sf-nginx:
+    image: nginx:stable-alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    container_name: sf-nginx
+    tty: true
+    volumes:
+      - ./sfvel-id/nginx.conf:/etc/nginx/conf.d/sf-nginx.conf
+      - ../sfvel-id/:/var/www/html/sfvel-id
+    depends_on:
+      - sfvel-id
+
+  sfvel-id:
+    image: sfvel-id
+    build:
+      args:
+        user: kubikubo
+        uid: 1000
+      context: ./sfvel-id
+      dockerfile: Dockerfile
+    container_name: sfvel-id
+    working_dir: /var/www/html/sfvel-id
+    tty: true
+    volumes:
+      - ../sfvel-id/:/var/www/html/sfvel-id
+      - ./sfvel-id/php-ini-overrides.ini:/usr/local/etc/php/conf.d/php-ini-overrides.ini
+      - ./sfvel-id/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+    expose:
+      - 9000
+
+  sf-mysql:
+    image: mysql:8.0
+    ports:
+      - "3306:3306"
+    container_name: sf-mysql
+    tty: true
+    volumes:
+      - ${MYSQL}
+    environment:
+      MYSQL_DATABASE: sfvel
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_PASSWORD: root
+
+  sf-redis:
+      image: redis
+      container_name: sf-redis
+      restart: always
+      ports:
+          - 6379:6379

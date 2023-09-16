@@ -41,7 +41,7 @@ services:
         volumes:
             - ../sfvel-api/:/var/www/html/sfvel-api-worker/
             - ./sfvel-api/supervisor:/etc/supervisor/
-            - ./sfvel-api/php/php-ini-overrides.ini:/usr/local/etc/php/conf.d/php-ini-overrides.ini
+            - ./sfvel-api/php-ini-overrides.ini:/usr/local/etc/php/conf.d/php-ini-overrides.ini
 
   sfvel-fe:
         container_name: sfvel-fe

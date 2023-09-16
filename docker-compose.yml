@@ -10,51 +10,28 @@ services:
     container_name: sf-nginx
     tty: true
     volumes:
-      - ./sfvel-api/nginx.conf:/etc/nginx/conf.d/sf-nginx.conf
-      - ../sfvel-api/:/var/www/html/sfvel-api
+      - ./sfvel-id/nginx.conf:/etc/nginx/conf.d/sf-nginx.conf
+      - ../sfvel-id/:/var/www/html/sfvel-id
     depends_on:
-      - sfvel-api
+      - sfvel-id
 
-  sfvel-api:
-    image: sfvel-api
+  sfvel-id:
+    image: sfvel-id
     build:
       args:
         user: kubikubo
         uid: 1000
-      context: ./sfvel-api
+      context: ./sfvel-id
       dockerfile: Dockerfile
-    container_name: sfvel-api
-    working_dir: /var/www/html/sfvel-api
+    container_name: sfvel-id
+    working_dir: /var/www/html/sfvel-id
     tty: true
     volumes:
-      - ../sfvel-api/:/var/www/html/sfvel-api
-      - ./sfvel-api/php-ini-overrides.ini:/usr/local/etc/php/conf.d/php-ini-overrides.ini
-      - ./sfvel-api/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+      - ../sfvel-id/:/var/www/html/sfvel-id
+      - ./sfvel-id/php-ini-overrides.ini:/usr/local/etc/php/conf.d/php-ini-overrides.ini
+      - ./sfvel-id/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
     expose:
       - 9000
-
-  sfvel-api-worker:
-        build:
-            context: .
-            dockerfile: sfvel-api/supervisor/Dockerfile
-        container_name: sfvel-api-worker
-        volumes:
-            - ../sfvel-api/:/var/www/html/sfvel-api-worker/
-            - ./sfvel-api/supervisor:/etc/supervisor/
-            - ./sfvel-api/php-ini-overrides.ini:/usr/local/etc/php/conf.d/php-ini-overrides.ini
-
-  sfvel-fe:
-        container_name: sfvel-fe
-        build:
-            context: ./sfvel-fe
-            dockerfile: Dockerfile
-        restart: always
-        tty: true
-        volumes:
-            - ../sfvel-fe/:/var/www/html/sfvel-fe
-            - /app/node_modules
-        ports:
-            - 5173:5173
 
   sf-mysql:
     image: mysql:8.0

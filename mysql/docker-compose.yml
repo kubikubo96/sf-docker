@@ -1,0 +1,47 @@
+version: "3.1"
+
+services:
+
+  sfmysql:
+    image: mysql:8.0
+    ports:
+      - "3300:3306"
+    container_name: sfmysql
+    tty: true
+    environment:
+      MYSQL_DATABASE: sfmysql
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_PASSWORD: root
+    # depends_on:
+    #   - sfmysql-1
+    #   - sfmysql-2
+
+  # sfmysql-1:
+  #   image: sfmysql-1
+  #   ports:
+  #     - "3301:3306"
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   container_name: sfmysql-1
+  #   working_dir: /var/www/html/sfmysql-1
+  #   tty: true
+  #   environment:
+  #     MYSQL_DATABASE: sfmysql1
+  #     MYSQL_ROOT_PASSWORD: root
+  #     MYSQL_PASSWORD: root
+
+  # sfmysql-2:
+  #   image: sfmysql-2
+  #   ports:
+  #     - "3302:3306"
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   container_name: sfmysql-2
+  #   working_dir: /var/www/html/sfmysql-2
+  #   tty: true
+  #   environment:
+  #     MYSQL_DATABASE: sfmysql2
+  #     MYSQL_ROOT_PASSWORD: root
+  #     MYSQL_PASSWORD: root

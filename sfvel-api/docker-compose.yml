@@ -61,4 +61,7 @@ services:
       container_name: sf-redis
       restart: always
       ports:
-          - 6379:6379
+        - 6379:6379
+      # environment:
+      #   REDIS_REPLICATION_MODE: master
+      #   REDIS_PASSWORD: sf@2023

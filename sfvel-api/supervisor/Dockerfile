@@ -26,6 +26,6 @@ RUN apt-get update \
 
 RUN mkdir -p "/etc/supervisor/logs"
 
-COPY /sfvel-api/supervisor/supervisord.conf /etc/supervisor/supervisord.conf
+COPY /supervisor/supervisord.conf /etc/supervisor/supervisord.conf
 
 CMD ["/usr/bin/supervisord", "-n", "-c",  "/etc/supervisor/supervisord.conf"]

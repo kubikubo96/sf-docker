@@ -5,21 +5,13 @@ services:
   sfmysql:
     image: mysql:8.0
     ports:
-      - "3300:3306"
-    command:
-      - --character-set-server=utf8mb4
-      - --collation-server=utf8mb4_unicode_ci
+      - "3306:3306"
     container_name: sfmysql
     tty: true
     environment:
       MYSQL_DATABASE: sfmysql
       MYSQL_ROOT_PASSWORD: root
       MYSQL_PASSWORD: root
-    volumes:
-      - ./initdb:/docker-entrypoint-initdb.d
-    # depends_on:
-    #   - sfmysql-1
-    #   - sfmysql-2
 
   # sfmysql-1:
   #   image: sfmysql-1

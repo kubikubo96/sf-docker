@@ -1,4 +1,4 @@
-CREATE DATABASE sfmysql;
+CREATE DATABASE IF NOT EXISTS sfmysql;
 
 USE sfmysql;
 
@@ -15,7 +15,4 @@ CREATE TABLE users
     created_at  DATETIME         NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Thời gian tạo',
     modified_by INT UNSIGNED     NULL COMMENT 'ID của người cập nhật, 0: Hệ thống',
     modified_at DATETIME         NULL ON UPDATE CURRENT_TIMESTAMP
-) COMMENT 'Dữ liệu Nhân viên' ENGINE = InnoDB
-                              DEFAULT CHARSET = ascii
-                              COLLATE = ascii_general_ci
-                              AUTO_INCREMENT = 1;
+) COMMENT 'Dữ liệu Nhân viên' ENGINE = InnoDB DEFAULT CHARSET = ascii COLLATE = ascii_general_ci AUTO_INCREMENT = 1;

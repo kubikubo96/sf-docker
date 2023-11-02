@@ -8,3 +8,5 @@ rabbitmq/.base_history
 rabbitmq/.erlang.cookie
 rabbitmq/data
 rabbitmq/log
+
+sf-mysql/mysql/data

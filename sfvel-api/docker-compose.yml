@@ -56,6 +56,17 @@ services:
   #       ports:
   #           - 5173:5173
 
+  sfmysql:
+    image: mysql:8.0
+    ports:
+      - "3306:3306"
+    container_name: sfmysql
+    tty: true
+    environment:
+      MYSQL_DATABASE: sfmysql
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_PASSWORD: root
+
   sf-redis:
       image: redis
       container_name: sf-redis

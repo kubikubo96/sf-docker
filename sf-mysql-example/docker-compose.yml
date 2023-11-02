@@ -2,16 +2,16 @@ version: "3.1"
 
 services:
 
-  sfmysql:
-    image: mysql:8.0
-    ports:
-      - "3306:3306"
-    container_name: sfmysql
-    tty: true
-    environment:
-      MYSQL_DATABASE: sfmysql
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_PASSWORD: root
+  # sfmysql:
+  #   image: mysql:8.0
+  #   ports:
+  #     - "3306:3306"
+  #   container_name: sfmysql
+  #   tty: true
+  #   environment:
+  #     MYSQL_DATABASE: sfmysql
+  #     MYSQL_ROOT_PASSWORD: root
+  #     MYSQL_PASSWORD: root
 
   # sfmysql-1:
   #   image: sfmysql-1

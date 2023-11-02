@@ -42,3 +42,17 @@ services:
   #     MYSQL_DATABASE: sfmysql2
   #     MYSQL_ROOT_PASSWORD: root
   #     MYSQL_PASSWORD: root
+
+  # sfmysql-3:
+  #   image: mysql:8
+  #   restart: always
+  #   ports:
+  #     - '4000:3306'
+  #   command:
+  #     - --character-set-server=utf8mb4
+  #     - --collation-server=utf8mb4_unicode_ci
+  #   environment:
+  #     - MYSQL_ROOT_PASSWORD=ghtk@123
+  #   volumes:
+  #     - ./mysql/initdb:/docker-entrypoint-initdb.d
+  #     - ./mysql/data:/var/lib/mysql

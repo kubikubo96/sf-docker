@@ -32,29 +32,18 @@ services:
       - ./xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
     expose:
       - 9000
+    extra_hosts:
+      - "host.docker.internal:192.168.0.104"  # Corrected indentation
 
   policy-key-worker:
     build:
-        context: ./
-        dockerfile: supervisor/Dockerfile
+      context: ./
+      dockerfile: supervisor/Dockerfile
     container_name: policy-key-worker
     volumes:
-        - ../../policy-key/:/var/www/html/policy-key-worker
-        - ./supervisor/:/etc/supervisor
-        - ./php-ini-overrides.ini:/usr/local/etc/php/conf.d/php-ini-overrides.ini
-
-  # sfvel-fe:
-  #       container_name: sfvel-fe
-  #       build:
-  #           context: ./sfvel-fe
-  #           dockerfile: Dockerfile
-  #       restart: always
-  #       tty: true
-  #       volumes:
-  #           - ../sfvel-fe/:/var/www/html/sfvel-fe
-  #           - /app/node_modules
-  #       ports:
-  #           - 5173:5173
+      - ../../policy-key/:/var/www/html/policy-key-worker
+      - ./supervisor/:/etc/supervisor
+      - ./php-ini-overrides.ini:/usr/local/etc/php/conf.d/php-ini-overrides.ini
 
   policy-key-mysql:
     image: mysql:8.0
@@ -66,13 +55,5 @@ services:
       MYSQL_DATABASE: policy_key_mysql
       MYSQL_ROOT_PASSWORD: root
       MYSQL_PASSWORD: root
-
-  # sf-redis:
-  #     image: redis
-  #     container_name: sf-redis
-  #     restart: always
-  #     ports:
-  #       - 6379:6379
-  #     environment:
-  #       REDIS_REPLICATION_MODE: master
-  #       REDIS_PASSWORD: sf@2023
+    extra_hosts:
+      - "host.docker.internal:192.168.0.104"  # Corrected indentation

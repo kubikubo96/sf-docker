@@ -1,0 +1,78 @@
+version: "3.1"
+
+services:
+
+  sf-nginx:
+    image: nginx:stable-alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    container_name: sf-nginx
+    tty: true
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/sf-nginx.conf
+      - ../../policy-key/:/var/www/html/policy-key
+    depends_on:
+      - policy-key
+
+  policy-key:
+    image: policy-key
+    build:
+      args:
+        user: kubikubo
+        uid: 1000
+      context: ./
+      dockerfile: Dockerfile
+    container_name: policy-key
+    working_dir: /var/www/html/policy-key
+    tty: true
+    volumes:
+      - ../../policy-key/:/var/www/html/policy-key
+      - ./php-ini-overrides.ini:/usr/local/etc/php/conf.d/php-ini-overrides.ini
+      - ./xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+    expose:
+      - 9000
+
+  policy-key-worker:
+    build:
+        context: ./
+        dockerfile: supervisor/Dockerfile
+    container_name: policy-key-worker
+    volumes:
+        - ../../policy-key/:/var/www/html/policy-key-worker
+        - ./supervisor/:/etc/supervisor
+        - ./php-ini-overrides.ini:/usr/local/etc/php/conf.d/php-ini-overrides.ini
+
+  # sfvel-fe:
+  #       container_name: sfvel-fe
+  #       build:
+  #           context: ./sfvel-fe
+  #           dockerfile: Dockerfile
+  #       restart: always
+  #       tty: true
+  #       volumes:
+  #           - ../sfvel-fe/:/var/www/html/sfvel-fe
+  #           - /app/node_modules
+  #       ports:
+  #           - 5173:5173
+
+  pk-mysql:
+    image: mysql:8.0
+    ports:
+      - "3306:3306"
+    container_name: policy-key
+    tty: true
+    environment:
+      MYSQL_DATABASE: pk-mysql
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_PASSWORD: root
+
+  # sf-redis:
+  #     image: redis
+  #     container_name: sf-redis
+  #     restart: always
+  #     ports:
+  #       - 6379:6379
+  #     environment:
+  #       REDIS_REPLICATION_MODE: master
+  #       REDIS_PASSWORD: sf@2023

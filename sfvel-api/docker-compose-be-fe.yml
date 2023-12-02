@@ -1,0 +1,80 @@
+version: "3.1"
+
+services:
+
+  sf-nginx:
+    image: nginx:stable-alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    container_name: sf-nginx
+    tty: true
+    volumes:
+      - ./sfvel-api/nginx.conf:/etc/nginx/conf.d/sf-nginx.conf
+      - ./sfvel-fe/nginx.conf:/etc/nginx/conf.d/fe-nginx.conf
+      - ../sfvel-api/:/var/www/html/sfvel-api
+      - ../sfvel-fe/:/var/www/html/sfvel-fe
+    depends_on:
+      - sfvel-api
+      - sfvel-fe
+
+  sfvel-api:
+    image: sfvel-api
+    build:
+      args:
+        user: kubikubo
+        uid: 1000
+      context: ./sfvel-api
+      dockerfile: Dockerfile
+    container_name: sfvel-api
+    working_dir: /var/www/html/sfvel-api
+    tty: true
+    volumes:
+      - ../sfvel-api/:/var/www/html/sfvel-api
+      - ./sfvel-api/php-ini-overrides.ini:/usr/local/etc/php/conf.d/php-ini-overrides.ini
+      - ./sfvel-api/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+    expose:
+      - 9000
+
+  sfvel-api-worker:
+        build:
+            context: .
+            dockerfile: sfvel-api/supervisor/Dockerfile
+        container_name: sfvel-api-worker
+        volumes:
+            - ../sfvel-api/:/var/www/html/sfvel-api-worker/
+            - ./sfvel-api/supervisor:/etc/supervisor/
+            - ./sfvel-api/php-ini-overrides.ini:/usr/local/etc/php/conf.d/php-ini-overrides.ini
+
+  sfvel-fe:
+        container_name: sfvel-fe
+        build:
+            context: ./sfvel-fe
+            dockerfile: Dockerfile
+        restart: always
+        tty: true
+        volumes:
+            - ../sfvel-fe/:/var/www/html/sfvel-fe
+            - /app/node_modules
+        ports:
+            - 8081:8080
+
+  sf-mysql:
+    image: mysql:8.0
+    ports:
+      - "3306:3306"
+    container_name: sf-mysql
+    tty: true
+    volumes:
+      - ${MYSQL}
+    environment:
+      MYSQL_DATABASE: sfvel
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_PASSWORD: root
+
+  sf-redis:
+      image: redis
+      container_name: sf-redis
+      restart: always
+      ports:
+          - 6379:6379

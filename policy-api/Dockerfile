@@ -36,6 +36,6 @@ RUN mkdir -p /home/$user/.composer && \
     chown -R $user:$user /home/$user
 
 # Set working directory
-WORKDIR /var/www/html/policy-key
-RUN chown -R www-data:www-data /var/www/html/policy-key
+WORKDIR /var/www/html/policy-api
+RUN chown -R www-data:www-data /var/www/html/policy-api
 USER $user

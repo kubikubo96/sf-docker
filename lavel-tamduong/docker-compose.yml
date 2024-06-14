@@ -1,0 +1,65 @@
+version: "3.1"
+
+services:
+
+  sf-nginx:
+    image: nginx:stable-alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    container_name: sf-nginx
+    tty: true
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/sf-nginx.conf
+      - ../../lavel-tamduong/:/var/www/html/lavel-tamduong
+    depends_on:
+      - lavel-tamduong
+
+  lavel-tamduong:
+    image: lavel-tamduong
+    build:
+      args:
+        user: kubikubo
+        uid: 1000
+      context: ./
+      dockerfile: Dockerfile
+    container_name: lavel-tamduong
+    working_dir: /var/www/html/lavel-tamduong
+    tty: true
+    volumes:
+      - ../../lavel-tamduong/:/var/www/html/lavel-tamduong
+      - ./php-ini-overrides.ini:/usr/local/etc/php/conf.d/php-ini-overrides.ini
+      - ./xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+    expose:
+      - 9000
+
+  lavel-tamduong-worker:
+    build:
+        context: ./
+        dockerfile: supervisor/Dockerfile
+    container_name: lavel-tamduong-worker
+    volumes:
+        - ../../lavel-tamduong/:/var/www/html/lavel-tamduong-worker
+        - ./supervisor/:/etc/supervisor
+        - ./php-ini-overrides.ini:/usr/local/etc/php/conf.d/php-ini-overrides.ini
+
+  sfmysql:
+    image: mysql:8.0
+    ports:
+      - "3306:3306"
+    container_name: sfmysql
+    tty: true
+    environment:
+      MYSQL_DATABASE: sfmysql
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_PASSWORD: root
+
+  sf-redis:
+      image: redis
+      container_name: sf-redis
+      restart: always
+      ports:
+        - 6379:6379
+      # environment:
+      #   REDIS_REPLICATION_MODE: master
+      #   REDIS_PASSWORD: sf@2023
